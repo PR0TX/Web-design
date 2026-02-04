@@ -1,0 +1,118 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChronoTrack - Профіль</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header border-bottom">
+    <div class="container py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+      <a class="text-decoration-none text-center text-sm-start brand-link" href="index.html">
+        <span class="brand-name">ChronoTrack</span>
+      </a>
+      <nav class="nav nav-pills flex-row flex-wrap site-nav ms-sm-auto">
+        <a class="nav-link" href="index.html">Робоча область</a>
+        <a class="nav-link active" aria-current="page" href="profile.html">Профіль</a>
+        <a class="nav-link" href="about.html">Про додаток</a>
+        <a class="nav-link" href="login.html">Вхід</a>
+        <a class="nav-link" href="register.html">Реєстрація</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container py-5">
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <h1 class="h4 section-title mb-1">Профіль користувача</h1>
+                <p class="text-muted mb-0">Інформація виводиться у табличному вигляді.</p>
+              </div>
+              <span class="badge text-bg-light">Статус: Premium</span>
+            </div>
+            <div class="table-responsive mt-3">
+              <table class="table align-middle">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="text-muted">Ім'я користувача</th>
+                    <td>Олексій Іванович</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-muted">Електронна пошта</th>
+                    <td>oleksii.ivanov@domain.com</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-muted">Стать</th>
+                    <td>Чоловіча</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-muted">Дата народження</th>
+                    <td>15.05.1992</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-muted">Зареєстровано</th>
+                    <td>12.01.2024</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-muted">Остання активність</th>
+                    <td>Сьогодні, 09:45</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h2 class="h5 section-title mb-3">Статистика</h2>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="feature-card">
+                  <p class="text-muted mb-1">Всього годин</p>
+                  <div class="h4 mb-0">158.5</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="feature-card">
+                  <p class="text-muted mb-1">Середня тривалість</p>
+                  <div class="h4 mb-0">6.2 год</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="feature-card">
+                  <p class="text-muted mb-1">Кількість сесій</p>
+                  <div class="h4 mb-0">42</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="border-top bg-white">
+    <div class="container py-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="small text-muted">ChronoTrack © 2026. Усі права захищені.</div>
+      <div class="footer-links d-flex flex-wrap gap-3 small">
+        <a href="#">Політика конфіденційності</a>
+        <a href="#">Умови використання</a>
+        <a href="#">Підтримка</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

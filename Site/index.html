@@ -1,0 +1,119 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChronoTrack - Робоча область</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header border-bottom">
+    <div class="container py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+      <a class="text-decoration-none text-center text-sm-start brand-link" href="index.html">
+        <span class="brand-name">ChronoTrack</span>
+      </a>
+      <nav class="nav nav-pills flex-row flex-wrap site-nav ms-sm-auto">
+        <a class="nav-link active" aria-current="page" href="index.html">Робоча область</a>
+        <a class="nav-link" href="profile.html">Профіль</a>
+        <a class="nav-link" href="about.html">Про додаток</a>
+        <a class="nav-link" href="login.html">Вхід</a>
+        <a class="nav-link" href="register.html">Реєстрація</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h2 class="h5 section-title">Поточна сесія</h2>
+            <form class="mt-3">
+              <div class="mb-3">
+                <label class="form-label">Назва задачі</label>
+                <input type="text" class="form-control" placeholder="Напр., Розробка макету">
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <label class="form-label">Час старту</label>
+                  <input type="time" class="form-control" value="09:00">
+                </div>
+                <div class="col-6">
+                  <label class="form-label">Час завершення</label>
+                  <input type="time" class="form-control" value="10:30">
+                </div>
+              </div>
+              <div class="timer-display mb-3">01:30:00</div>
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary">Запустити</button>
+                <button type="button" class="btn btn-warning">Призупинити / Продовжити</button>
+                <button type="button" class="btn btn-outline-secondary">Зупинити</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <h2 class="h5 section-title mb-0">Історія сесій</h2>
+              <span class="badge text-bg-light">Сьогодні</span>
+            </div>
+            <div class="table-responsive mt-3">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>Назва</th>
+                    <th>Початок</th>
+                    <th>Завершення</th>
+                    <th>Тривалість</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Аналіз вимог проєкту</td>
+                    <td>09:00</td>
+                    <td>10:30</td>
+                    <td><span class="badge text-bg-primary">1 год 30 хв</span></td>
+                  </tr>
+                  <tr>
+                    <td>Дизайн інтерфейсу</td>
+                    <td>11:00</td>
+                    <td>13:45</td>
+                    <td><span class="badge text-bg-primary">2 год 45 хв</span></td>
+                  </tr>
+                  <tr>
+                    <td>Нарада з командою</td>
+                    <td>15:00</td>
+                    <td>15:30</td>
+                    <td><span class="badge text-bg-primary">30 хв</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-top bg-white mt-4">
+    <div class="container py-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="small text-muted">ChronoTrack © 2026. Усі права захищені.</div>
+      <div class="footer-links d-flex flex-wrap gap-3 small">
+        <a href="#">Політика конфіденційності</a>
+        <a href="#">Умови використання</a>
+        <a href="#">Підтримка</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

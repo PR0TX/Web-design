@@ -1,0 +1,72 @@
+<!-- about.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChronoTrack - Про додаток</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header border-bottom">
+    <div class="container py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+      <a class="text-decoration-none text-center text-sm-start brand-link" href="index.html">
+        <span class="brand-name">ChronoTrack</span>
+      </a>
+      <nav class="nav nav-pills flex-row flex-wrap site-nav ms-sm-auto">
+        <a class="nav-link" href="index.html">Робоча область</a>
+        <a class="nav-link" href="profile.html">Профіль</a>
+        <a class="nav-link active" aria-current="page" href="about.html">Про додаток</a>
+        <a class="nav-link" href="login.html">Вхід</a>
+        <a class="nav-link" href="register.html">Реєстрація</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container py-5">
+    <section class="text-center mb-5">
+      <div class="about-logo">
+        <img src="logo.png" alt="ChronoTrack logo">
+      </div>
+      <p class="text-muted mx-auto" style="max-width: 720px;">Інтерфейс для обліку робочого часу, де можна запускати таймер, призупиняти, зупиняти та фіксувати назву задачі з часом початку і завершення.</p>
+    </section>
+
+    <section class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <h2 class="h5 section-title">Швидкий старт</h2>
+          <p class="text-muted">Стартуйте сесію одним натисканням і одразу додавайте назву задачі.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <h2 class="h5 section-title">Контроль часу</h2>
+          <p class="text-muted">Зупиняйте та відновлюйте сесії, фіксуючи точні проміжки роботи.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <h2 class="h5 section-title">Історія</h2>
+          <p class="text-muted">Зберігайте сесії із часом початку, завершення та тривалістю.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-top bg-white">
+    <div class="container py-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="small text-muted">ChronoTrack © 2026. Усі права захищені.</div>
+      <div class="footer-links d-flex flex-wrap gap-3 small">
+        <a href="#">Політика конфіденційності</a>
+        <a href="#">Умови використання</a>
+        <a href="#">Підтримка</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
