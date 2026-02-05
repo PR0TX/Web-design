@@ -2,6 +2,9 @@ name: Deploy site to Pages
 on:
   push:
     branches: [ LAB1 ]
+    paths:
+      - 'Site/**'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 permissions:
   contents: read
