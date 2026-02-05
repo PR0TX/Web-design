@@ -77,3 +77,4 @@ flowchart LR
 ## Контакти
 * **Автор:** Протченко П.О., група **КВ-34**
 * **Telegram:** [@PR0TX](https://t.me/PR0TX)
+* **Звіт (Google Drive):** [Лабораторна робота №1](https://docs.google.com/document/d/1ernMiHolo0s_HejpgxU_7y6GGLvufZJv/edit?usp=sharing&ouid=109306955313039128869&rtpof=true&sd=true)
