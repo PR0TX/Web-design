@@ -14,11 +14,26 @@ concurrency:
 jobs:
   deploy:
     name: Publish ${{ github.ref_name }} to gh-pages
+    environment:
+      name: github-pages
+      url: ${{ steps.meta.outputs.site_url }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source branch
         uses: actions/checkout@v4
+
+      - name: Compute site URL
+        id: meta
+        env:
+          LAB_BRANCH: ${{ github.ref_name }}
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -eu
+
+          LAB_DIR="$(printf '%s' "$LAB_BRANCH" | tr '[:upper:]' '[:lower:]')"
+          echo "site_url=https://${REPOSITORY_OWNER}.github.io/${REPOSITORY_NAME}/${LAB_DIR}/index.html" >> "$GITHUB_OUTPUT"
 
       - name: Download current gh-pages branch if it exists
         env:
