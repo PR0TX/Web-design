@@ -11,7 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page="workspace">
   <header class="site-header border-bottom">
     <div class="container py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
       <a class="text-decoration-none text-center text-sm-start brand-link" href="index.html">
@@ -32,28 +32,33 @@
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body">
-            <h2 class="h5 section-title">Поточна сесія</h2>
-            <form class="mt-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <h1 class="h5 section-title mb-0">Поточна сесія</h1>
+              <span id="workspace-status-badge" class="badge text-bg-light">Очікує запуску</span>
+            </div>
+            <form id="workspace-session-form" class="mt-3" novalidate>
               <div class="mb-3">
-                <label class="form-label">Назва задачі</label>
-                <input type="text" class="form-control" placeholder="Напр., Розробка макету">
+                <label class="form-label" for="task-name">Назва задачі</label>
+                <input id="task-name" name="taskName" type="text" class="form-control" placeholder="Напр., Розробка макету" maxlength="120">
               </div>
               <div class="row g-2 mb-3">
                 <div class="col-6">
-                  <label class="form-label">Час старту</label>
-                  <input type="time" class="form-control" value="09:00">
+                  <label class="form-label" for="session-start-time">Час старту</label>
+                  <input id="session-start-time" type="time" class="form-control" readonly>
                 </div>
                 <div class="col-6">
-                  <label class="form-label">Час завершення</label>
-                  <input type="time" class="form-control" value="10:30">
+                  <label class="form-label" for="session-end-time">Час завершення</label>
+                  <input id="session-end-time" type="time" class="form-control" readonly>
                 </div>
               </div>
-              <div class="timer-display mb-3">01:30:00</div>
+              <div id="timer-display" class="timer-display mb-2">00:00:00</div>
+              <p id="workspace-secondary-text" class="text-muted small mb-3">Запустіть таймер, щоб почати фіксацію робочої сесії.</p>
               <div class="d-grid gap-2">
-                <button type="button" class="btn btn-primary">Запустити</button>
-                <button type="button" class="btn btn-warning">Призупинити / Продовжити</button>
-                <button type="button" class="btn btn-outline-secondary">Зупинити</button>
+                <button id="start-button" type="button" class="btn btn-primary">Запустити</button>
+                <button id="toggle-button" type="button" class="btn btn-warning">Призупинити</button>
+                <button id="stop-button" type="button" class="btn btn-outline-secondary">Зупинити</button>
               </div>
+              <div id="workspace-feedback" class="alert d-none mt-3 mb-0" role="status" aria-live="polite"></div>
             </form>
           </div>
         </div>
@@ -64,7 +69,7 @@
           <div class="card-body">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
               <h2 class="h5 section-title mb-0">Історія сесій</h2>
-              <span class="badge text-bg-light">Сьогодні</span>
+              <span id="history-badge" class="badge text-bg-light">Усього: 0</span>
             </div>
             <div class="table-responsive mt-3">
               <table class="table align-middle">
@@ -76,28 +81,10 @@
                     <th>Тривалість</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>Аналіз вимог проєкту</td>
-                    <td>09:00</td>
-                    <td>10:30</td>
-                    <td><span class="badge text-bg-primary">1 год 30 хв</span></td>
-                  </tr>
-                  <tr>
-                    <td>Дизайн інтерфейсу</td>
-                    <td>11:00</td>
-                    <td>13:45</td>
-                    <td><span class="badge text-bg-primary">2 год 45 хв</span></td>
-                  </tr>
-                  <tr>
-                    <td>Нарада з командою</td>
-                    <td>15:00</td>
-                    <td>15:30</td>
-                    <td><span class="badge text-bg-primary">30 хв</span></td>
-                  </tr>
-                </tbody>
+                <tbody id="history-table-body"></tbody>
               </table>
             </div>
+            <p id="history-empty-state" class="text-muted small mb-0 d-none">Сесій ще немає. Після зупинки таймера запис з’явиться у таблиці.</p>
           </div>
         </div>
 
@@ -115,5 +102,6 @@
       </div>
     </div>
   </footer>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -81,6 +81,24 @@ footer {
   text-align: center;
 }
 
+.timer-display.is-running {
+  background: #dbeafe;
+  color: var(--brand-dark);
+}
+
+.timer-display.is-paused {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.timer-display.is-idle {
+  background: #eef2ff;
+}
+
+.alert {
+  border-radius: 14px;
+}
+
 .logo-badge {
   width: 120px;
   height: 120px;
@@ -116,6 +134,14 @@ footer {
   padding: 20px;
   background: #ffffff;
   height: 100%;
+}
+
+.history-task-name {
+  font-weight: 600;
+}
+
+.history-task-meta {
+  font-size: 0.85rem;
 }
 
 .footer-links a {
