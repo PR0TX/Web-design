@@ -1,31 +1,134 @@
-name: Deploy site to Pages
+name: Deploy labs to Pages
+
 on:
   push:
-    branches: [ LAB1 ]
+    branches:
+      - 'LAB*'
     paths:
       - 'Site/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
+
 jobs:
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout source branch
         uses: actions/checkout@v4
-      - name: Upload artifact (Site/)
+
+      - name: Checkout current gh-pages branch
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: existing-pages
+          fetch-depth: 1
+
+      - name: Build Pages artifact
+        env:
+          LAB_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -eu
+
+          LAB_DIR="$(printf '%s' "$LAB_BRANCH" | tr '[:upper:]' '[:lower:]')"
+          mkdir -p public
+
+          if [ -d existing-pages ]; then
+            rsync -a --exclude '.git' existing-pages/ public/
+          fi
+
+          rm -rf "public/$LAB_DIR"
+          mkdir -p "public/$LAB_DIR"
+          rsync -a Site/ "public/$LAB_DIR/"
+          touch public/.nojekyll
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          public_dir = Path('public')
+          lab_dirs = sorted(
+              [path.name for path in public_dir.iterdir() if path.is_dir() and path.name.startswith('lab')],
+              key=lambda item: (len(item), item)
+          )
+
+          links = '\n'.join(
+              f'      <li><a href="./{lab}/index.html">{lab.upper()}</a></li>'
+              for lab in lab_dirs
+          ) or '      <li>Ще немає опублікованих лабораторних.</li>'
+
+          index_html = f"""<!DOCTYPE html>
+          <html lang="uk">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Web Design Labs</title>
+            <style>
+              body {{
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #f8fafc;
+                color: #0f172a;
+              }}
+              main {{
+                max-width: 720px;
+                margin: 0 auto;
+                padding: 48px 20px;
+              }}
+              h1 {{
+                margin-bottom: 12px;
+              }}
+              p {{
+                color: #475569;
+              }}
+              ul {{
+                padding-left: 20px;
+              }}
+              li + li {{
+                margin-top: 10px;
+              }}
+              a {{
+                color: #1d4ed8;
+                text-decoration: none;
+                font-weight: 700;
+              }}
+              a:hover {{
+                text-decoration: underline;
+              }}
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Опубліковані лабораторні роботи</h1>
+              <p>Кожна гілка виду <code>LAB*</code> публікується у власну папку й не перезаписує попередні результати.</p>
+              <ul>
+          {links}
+              </ul>
+            </main>
+          </body>
+          </html>
+          """
+
+          (public_dir / 'index.html').write_text(index_html, encoding='utf-8')
+          PY
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./Site
-      - name: Deploy
+          path: ./public
+
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
