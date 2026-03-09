@@ -238,4 +238,4 @@ Javascript-код організовано за шаблоном `MVC`, тобт
 * **Telegram:** [@PR0TX](https://t.me/PR0TX)
 * **Лабораторна робота:** №2, Web-дизайн
 * **Завдання:** реалізація функціональності Web-додатка мовою Javascript за шаблоном MVC
-* **Звіт (Google Drive):** [Лабораторна робота](https://docs.google.com/document/d/1ernMiHolo0s_HejpgxU_7y6GGLvufZJv/edit?usp=sharing&ouid=109306955313039128869&rtpof=true&sd=true)
+* **Звіт (Google Drive):** [Лабораторна робота](https://docs.google.com/document/d/1PZQhNwNStqaBKlqMNhXtdPDgcd4qvl4F/edit?usp=sharing&ouid=109306955313039128869&rtpof=true&sd=true)
