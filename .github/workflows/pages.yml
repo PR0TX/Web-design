@@ -1,12 +1,7 @@
 name: Deploy labs to Pages
+run-name: Deploy ${{ github.ref_name }} to Pages
 
 on:
-  push:
-    branches:
-      - 'LAB*'
-    paths:
-      - 'Site/**'
-      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
