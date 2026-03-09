@@ -5,9 +5,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
@@ -15,23 +13,25 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy ${{ github.ref_name }} to github-pages
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    name: Publish ${{ github.ref_name }} to gh-pages
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source branch
         uses: actions/checkout@v4
 
-      - name: Checkout current gh-pages branch
-        uses: actions/checkout@v4
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: existing-pages
-          fetch-depth: 1
+      - name: Download current gh-pages branch if it exists
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -eu
+
+          if git ls-remote --exit-code --heads "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" existing-pages
+          else
+            mkdir -p existing-pages
+          fi
 
       - name: Build Pages artifact
         env:
@@ -42,7 +42,7 @@ jobs:
           LAB_DIR="$(printf '%s' "$LAB_BRANCH" | tr '[:upper:]' '[:lower:]')"
           mkdir -p public
 
-          if [ -d existing-pages ]; then
+          if [ -d existing-pages/.git ]; then
             rsync -a --exclude '.git' existing-pages/ public/
           fi
 
@@ -119,11 +119,26 @@ jobs:
           (public_dir / 'index.html').write_text(index_html, encoding='utf-8')
           PY
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
+      - name: Publish site to gh-pages branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          LAB_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -eu
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          cd public
+          git init
+          git checkout -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+            exit 0
+          fi
+
+          git commit -m "Publish ${LAB_BRANCH}"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin gh-pages
