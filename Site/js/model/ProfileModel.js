@@ -8,10 +8,24 @@ import {
 class ProfileModel {
   constructor(timeTrackerModel) {
     this.timeTrackerModel = timeTrackerModel;
+    this.authUser = null;
+  }
+
+  setAuthUser(user) {
+    this.authUser = user;
+  }
+
+  normalizeDateValue(value) {
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return `${value}T12:00:00`;
+    }
+
+    return value;
   }
 
   getViewModel(now = Date.now()) {
     const state = this.timeTrackerModel.getState();
+    const authUser = this.authUser;
     const completedSessions = [...state.sessions]
       .sort((firstSession, secondSession) => secondSession.startedAt - firstSession.startedAt);
     const totalDurationMs = completedSessions
@@ -19,36 +33,46 @@ class ProfileModel {
     const averageDurationMs = completedSessions.length > 0
       ? totalDurationMs / completedSessions.length
       : 0;
+    const profileSource = authUser
+      ? {
+        fullName: authUser.fullName,
+        email: authUser.email,
+        gender: authUser.gender,
+        birthDate: this.normalizeDateValue(authUser.birthDate),
+        registeredAt: authUser.registeredAt,
+        plan: authUser.plan || 'Локальний профіль',
+      }
+      : state.profile;
     const lastActivityAt = state.activeSession
       ? now
-      : state.profile.lastSeenAt || completedSessions[0]?.endedAt || state.profile.registeredAt;
+      : state.profile.lastSeenAt || completedSessions[0]?.endedAt || profileSource.registeredAt;
 
     return {
-      planLabel: `Статус: ${state.profile.plan}`,
+      planLabel: `Статус: ${profileSource.plan || 'Standard'}`,
       details: [
         {
           label: 'Ім\'я користувача',
-          value: state.profile.fullName,
+          value: profileSource.fullName,
         },
         {
           label: 'Електронна пошта',
-          value: state.profile.email,
+          value: profileSource.email,
         },
         {
           label: 'Стать',
-          value: state.profile.gender,
+          value: profileSource.gender,
         },
         {
           label: 'Дата народження',
-          value: formatDate(state.profile.birthDate),
+          value: formatDate(profileSource.birthDate),
         },
         {
           label: 'Зареєстровано',
-          value: formatDate(state.profile.registeredAt),
+          value: formatDate(profileSource.registeredAt),
         },
         {
           label: 'Остання активність',
-          value: state.activeSession
+            value: state.activeSession
             ? `Триває сесія, ${formatRelativeDateTime(lastActivityAt, now)}`
             : formatRelativeDateTime(lastActivityAt, now),
         },

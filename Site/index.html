@@ -5,6 +5,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChronoTrack - Робоча область</title>
+  <script>
+    (function () {
+      try {
+        var users = JSON.parse(localStorage.getItem('chronotrack-users') || '[]');
+        var temporarySession = JSON.parse(sessionStorage.getItem('chronotrack-auth-session-temporary') || 'null');
+        var persistentSession = JSON.parse(localStorage.getItem('chronotrack-auth-session') || 'null');
+        var session = temporarySession && temporarySession.userId ? temporarySession : persistentSession;
+        var isAuthenticated = Boolean(
+          session
+          && session.userId
+          && Array.isArray(users)
+          && users.some(function (user) { return user && user.id === session.userId; })
+        );
+        document.documentElement.dataset.authState = isAuthenticated ? 'authenticated' : 'guest';
+      } catch (error) {
+        document.documentElement.dataset.authState = 'guest';
+      }
+    }());
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
@@ -21,8 +40,8 @@
         <a class="nav-link active" aria-current="page" href="index.html">Робоча область</a>
         <a class="nav-link" href="profile.html">Профіль</a>
         <a class="nav-link" href="about.html">Про додаток</a>
-        <a class="nav-link" href="login.html">Вхід</a>
-        <a class="nav-link" href="register.html">Реєстрація</a>
+        <a class="nav-link" data-guest-link href="login.html">Вхід</a>
+        <a class="nav-link" data-guest-link href="register.html">Реєстрація</a>
       </nav>
     </div>
   </header>
@@ -79,6 +98,7 @@
                     <th>Початок</th>
                     <th>Завершення</th>
                     <th>Тривалість</th>
+                    <th class="text-end">Дія</th>
                   </tr>
                 </thead>
                 <tbody id="history-table-body"></tbody>

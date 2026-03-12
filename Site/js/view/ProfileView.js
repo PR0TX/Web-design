@@ -7,6 +7,8 @@ class ProfileView {
     this.averageTime = document.getElementById('profile-average-time');
     this.sessionCount = document.getElementById('profile-session-count');
     this.note = document.getElementById('profile-stats-note');
+    this.feedback = document.getElementById('profile-feedback');
+    this.logoutButton = document.getElementById('profile-logout-button');
   }
 
   render(viewModel) {
@@ -34,6 +36,37 @@ class ProfileView {
       row.append(labelCell, valueCell);
       this.detailsBody.append(row);
     });
+  }
+
+  bindLogout(handler) {
+    this.logoutButton?.addEventListener('click', handler);
+  }
+
+  setLogoutLoading(isLoading) {
+    if (!this.logoutButton) {
+      return;
+    }
+
+    this.logoutButton.disabled = isLoading;
+    this.logoutButton.textContent = isLoading ? 'Вихід...' : 'Вийти';
+  }
+
+  showFeedback(message, type = 'info') {
+    if (!this.feedback) {
+      return;
+    }
+
+    this.feedback.textContent = message;
+    this.feedback.className = `alert alert-${type} mt-3 mb-0`;
+  }
+
+  clearFeedback() {
+    if (!this.feedback) {
+      return;
+    }
+
+    this.feedback.textContent = '';
+    this.feedback.className = 'alert d-none mt-3 mb-0';
   }
 }
 

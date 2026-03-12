@@ -242,6 +242,18 @@ class TimeTrackerModel {
 
     return { ...completedSession };
   }
+
+  deleteSession(sessionId) {
+    const sessionExists = this.state.sessions.some((session) => session.id === sessionId);
+
+    if (!sessionExists) {
+      throw new Error('Не вдалося знайти сесію для видалення.');
+    }
+
+    this.applyState((state) => {
+      state.sessions = state.sessions.filter((session) => session.id !== sessionId);
+    });
+  }
 }
 
 export default TimeTrackerModel;

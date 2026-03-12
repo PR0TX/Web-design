@@ -66,6 +66,10 @@ footer {
   background: var(--brand);
 }
 
+html[data-auth-state="authenticated"] [data-guest-link] {
+  display: none !important;
+}
+
 .section-title {
   font-weight: 700;
 }
@@ -97,6 +101,10 @@ footer {
 
 .alert {
   border-radius: 14px;
+}
+
+.auth-card-subtext {
+  min-height: 1.5rem;
 }
 
 .logo-badge {
@@ -142,6 +150,26 @@ footer {
 
 .history-task-meta {
   font-size: 0.85rem;
+}
+
+.history-delete-button {
+  border: 1px solid #fecaca;
+  background: #fff5f5;
+  color: #b91c1c;
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.history-delete-button:hover,
+.history-delete-button:focus-visible {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+  outline: none;
 }
 
 .footer-links a {

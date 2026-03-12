@@ -16,12 +16,14 @@ class WorkspaceController {
     this.handleStartSession = this.handleStartSession.bind(this);
     this.handleToggleSession = this.handleToggleSession.bind(this);
     this.handleStopSession = this.handleStopSession.bind(this);
+    this.handleDeleteSession = this.handleDeleteSession.bind(this);
   }
 
   init() {
     this.view.bindStartSession(this.handleStartSession);
     this.view.bindToggleSession(this.handleToggleSession);
     this.view.bindStopSession(this.handleStopSession);
+    this.view.bindDeleteSession(this.handleDeleteSession);
     this.model.bindStateChange(this.handleStateChange);
     this.handleStateChange(this.model.getState());
   }
@@ -156,6 +158,29 @@ class WorkspaceController {
         `Сесію "${completedSession.taskName}" збережено з тривалістю ${formatDurationHuman(completedSession.elapsedMs)}.`,
         'success',
       );
+    } catch (error) {
+      this.view.showFeedback(error.message, 'danger');
+    }
+  }
+
+  handleDeleteSession(sessionId) {
+    const state = this.model.getState();
+    const session = state.sessions.find((item) => item.id === sessionId);
+
+    if (!session) {
+      this.view.showFeedback('Не вдалося знайти сесію для видалення.', 'danger');
+      return;
+    }
+
+    const isConfirmed = window.confirm(`Видалити сесію "${session.taskName}" з історії?`);
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    try {
+      this.model.deleteSession(sessionId);
+      this.view.showFeedback(`Сесію "${session.taskName}" видалено з історії.`, 'warning');
     } catch (error) {
       this.view.showFeedback(error.message, 'danger');
     }

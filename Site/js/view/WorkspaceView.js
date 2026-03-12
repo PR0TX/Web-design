@@ -36,6 +36,18 @@ class WorkspaceView {
     this.stopButton.addEventListener('click', handler);
   }
 
+  bindDeleteSession(handler) {
+    this.historyBody.addEventListener('click', (event) => {
+      const actionButton = event.target.closest('[data-session-delete-id]');
+
+      if (!actionButton) {
+        return;
+      }
+
+      handler(actionButton.dataset.sessionDeleteId);
+    });
+  }
+
   render(viewModel) {
     this.taskInput.value = viewModel.taskName;
     this.taskInput.disabled = viewModel.isTaskLocked;
@@ -95,7 +107,18 @@ class WorkspaceView {
       durationBadge.textContent = row.duration;
       durationCell.append(durationBadge);
 
-      tableRow.append(taskCell, startCell, endCell, durationCell);
+      const actionCell = document.createElement('td');
+      actionCell.className = 'text-end';
+
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'history-delete-button';
+      deleteButton.dataset.sessionDeleteId = row.id;
+      deleteButton.setAttribute('aria-label', `Видалити сесію ${row.taskName}`);
+      deleteButton.textContent = 'Видалити';
+      actionCell.append(deleteButton);
+
+      tableRow.append(taskCell, startCell, endCell, durationCell, actionCell);
       this.historyBody.append(tableRow);
     });
   }
