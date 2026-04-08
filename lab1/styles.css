@@ -1,0 +1,159 @@
+/* styles.css */
+:root {
+  --brand: #1d4ed8;
+  --brand-dark: #1e3a8a;
+  --accent: #0f766e;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --surface: #ffffff;
+}
+
+
+body {
+  font-family: "Manrope", sans-serif;
+  background: linear-gradient(180deg, #f6f8ff 0%, #ffffff 65%);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.site-header {
+  background: #ffffff;
+}
+
+.brand-name {
+  font-weight: 600;
+  color: var(--brand-dark);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.brand-link {
+  line-height: 1;
+  width: 100%;
+  display: block;
+}
+
+.brand-hero {
+  font-size: 2.4rem;
+  letter-spacing: 0.25em;
+}
+
+.site-nav {
+  gap: 0.4rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.site-nav .nav-link {
+  color: #334155;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.95rem;
+}
+
+.site-nav .nav-link.active {
+  background: var(--brand);
+}
+
+.section-title {
+  font-weight: 700;
+}
+
+.timer-display {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #eef2ff;
+  color: var(--brand-dark);
+  border-radius: 14px;
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.logo-badge {
+  width: 120px;
+  height: 120px;
+  border-radius: 30px;
+  background: var(--brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-badge svg {
+  width: 64px;
+  height: 64px;
+  color: #ffffff;
+}
+
+.about-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.about-logo img {
+  display: block;
+  height: 170px;
+  width: auto;
+}
+
+.feature-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 20px;
+  background: #ffffff;
+  height: 100%;
+}
+
+.footer-links a {
+  color: #475569;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--brand-dark);
+}
+
+@media (max-width: 576px) {
+  .brand-hero {
+    font-size: 1.9rem;
+    letter-spacing: 0.18em;
+  }
+
+  .about-logo img {
+    height: 80px;
+  }
+
+  .site-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .site-nav .nav-link {
+    flex: 0 1 calc(50% - 0.4rem);
+    text-align: center;
+  }
+}
+
+@media (min-width: 576px) {
+  .brand-link {
+    width: auto;
+  }
+
+  .site-nav {
+    width: auto;
+  }
+}

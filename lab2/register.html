@@ -1,0 +1,111 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChronoTrack - Реєстрація</title>
+  <script>
+    (function () {
+      try {
+        var users = JSON.parse(localStorage.getItem('chronotrack-users') || '[]');
+        var temporarySession = JSON.parse(sessionStorage.getItem('chronotrack-auth-session-temporary') || 'null');
+        var persistentSession = JSON.parse(localStorage.getItem('chronotrack-auth-session') || 'null');
+        var session = temporarySession && temporarySession.userId ? temporarySession : persistentSession;
+        var isAuthenticated = Boolean(
+          session
+          && session.userId
+          && Array.isArray(users)
+          && users.some(function (user) { return user && user.id === session.userId; })
+        );
+        document.documentElement.dataset.authState = isAuthenticated ? 'authenticated' : 'guest';
+      } catch (error) {
+        document.documentElement.dataset.authState = 'guest';
+      }
+    }());
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="register">
+  <header class="site-header border-bottom">
+    <div class="container py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+      <a class="text-decoration-none text-center text-sm-start brand-link" href="index.html">
+        <span class="brand-name">ChronoTrack</span>
+      </a>
+      <nav class="nav nav-pills flex-row flex-wrap site-nav ms-sm-auto">
+        <a class="nav-link" href="index.html">Робоча область</a>
+        <a class="nav-link" href="profile.html">Профіль</a>
+        <a class="nav-link" href="about.html">Про додаток</a>
+        <a class="nav-link" data-guest-link href="login.html">Вхід</a>
+        <a class="nav-link active" data-guest-link aria-current="page" href="register.html">Реєстрація</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-9 col-lg-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4 p-lg-5">
+            <h1 class="h4 section-title text-center">Реєстрація користувача</h1>
+            <p class="text-muted text-center mb-4">Заповніть обов'язкові поля для створення профілю.</p>
+            <form id="register-form" novalidate>
+              <div class="mb-3">
+                <label class="form-label" for="register-name">Ім'я</label>
+                <input id="register-name" name="fullName" type="text" class="form-control" placeholder="Павло Протченко" autocomplete="name" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="register-email">Email</label>
+                <input id="register-email" name="email" type="email" class="form-control" placeholder="example@mail.com" autocomplete="email" required>
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="register-gender">Стать</label>
+                  <select id="register-gender" name="gender" class="form-select" required>
+                    <option value="" selected disabled>Оберіть</option>
+                    <option value="Чоловіча">Чоловіча</option>
+                    <option value="Жіноча">Жіноча</option>
+                    <option value="Інше">Інше</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="register-birth-date">Дата народження</label>
+                  <input id="register-birth-date" name="birthDate" type="date" class="form-control" autocomplete="bday" required>
+                </div>
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="register-password">Пароль</label>
+                  <input id="register-password" name="password" type="password" class="form-control" placeholder="Не менше 8 символів" autocomplete="new-password" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="register-password-confirm">Підтвердження пароля</label>
+                  <input id="register-password-confirm" name="passwordConfirm" type="password" class="form-control" placeholder="Повторіть пароль" autocomplete="new-password" required>
+                </div>
+              </div>
+              <div id="register-feedback" class="alert d-none mb-3" role="status" aria-live="polite"></div>
+              <button type="submit" class="btn btn-primary w-100">Створити профіль</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-top bg-white">
+    <div class="container py-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="small text-muted">ChronoTrack © 2026. Усі права захищені.</div>
+      <div class="footer-links d-flex flex-wrap gap-3 small">
+        <a href="#">Політика конфіденційності</a>
+        <a href="#">Умови використання</a>
+        <a href="#">Підтримка</a>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
