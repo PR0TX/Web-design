@@ -5,25 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChronoTrack - Робоча область</title>
-  <script>
-    (function () {
-      try {
-        var users = JSON.parse(localStorage.getItem('chronotrack-users') || '[]');
-        var temporarySession = JSON.parse(sessionStorage.getItem('chronotrack-auth-session-temporary') || 'null');
-        var persistentSession = JSON.parse(localStorage.getItem('chronotrack-auth-session') || 'null');
-        var session = temporarySession && temporarySession.userId ? temporarySession : persistentSession;
-        var isAuthenticated = Boolean(
-          session
-          && session.userId
-          && Array.isArray(users)
-          && users.some(function (user) { return user && user.id === session.userId; })
-        );
-        document.documentElement.dataset.authState = isAuthenticated ? 'authenticated' : 'guest';
-      } catch (error) {
-        document.documentElement.dataset.authState = 'guest';
-      }
-    }());
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
@@ -31,53 +12,56 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page="workspace">
+  <div id="app" v-cloak>
   <header class="site-header border-bottom">
     <div class="container py-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
-      <a class="text-decoration-none text-center text-sm-start brand-link" href="index.html">
+      <a class="text-decoration-none text-center text-sm-start brand-link" data-page-link href="index.html">
         <span class="brand-name">ChronoTrack</span>
       </a>
       <nav class="nav nav-pills flex-row flex-wrap site-nav ms-sm-auto">
-        <a class="nav-link active" aria-current="page" href="index.html">Робоча область</a>
-        <a class="nav-link" href="profile.html">Профіль</a>
-        <a class="nav-link" href="about.html">Про додаток</a>
-        <a class="nav-link" data-guest-link href="login.html">Вхід</a>
-        <a class="nav-link" data-guest-link href="register.html">Реєстрація</a>
+        <a class="nav-link active" data-auth-link v-show="authReady && isAuthenticated" aria-current="page" data-page-link href="index.html">Робоча область</a>
+        <a class="nav-link" data-auth-link v-show="authReady && isAuthenticated" data-page-link href="profile.html">Профіль</a>
+        <a class="nav-link" data-page-link href="about.html">Про додаток</a>
+        <a class="nav-link" data-page-link data-guest-link v-show="authReady && !isAuthenticated" href="login.html">Вхід</a>
+        <a class="nav-link" data-page-link data-guest-link v-show="authReady && !isAuthenticated" href="register.html">Реєстрація</a>
       </nav>
     </div>
   </header>
 
-  <main class="container py-4">
+  <main
+    class="container py-4"
+    v-motion
+    :initial="{ opacity: 0, x: 40 }"
+    :animate="{ opacity: 1, x: 0 }"
+    :transition="{ duration: 0.3, ease: 'easeInOut' }"
+  >
     <div class="row g-4">
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
               <h1 class="h5 section-title mb-0">Поточна сесія</h1>
-              <span id="workspace-status-badge" class="badge text-bg-light">Очікує запуску</span>
+              <span id="workspace-status-badge" :class="['badge', viewModel.status.className]">{{ viewModel.status.label }}</span>
             </div>
-            <form id="workspace-session-form" class="mt-3" novalidate>
+            <form id="workspace-session-form" class="mt-3" novalidate @submit.prevent="startSession">
               <div class="mb-3">
                 <label class="form-label" for="task-name">Назва задачі</label>
-                <input id="task-name" name="taskName" type="text" class="form-control" placeholder="Напр., Розробка макету" maxlength="120">
+                <input id="task-name" v-model.trim="taskName" name="taskName" type="text" class="form-control" placeholder="Напр., Розробка макету" maxlength="120" :disabled="viewModel.isTaskLocked || loading">
               </div>
-              <div class="row g-2 mb-3">
-                <div class="col-6">
-                  <label class="form-label" for="session-start-time">Час старту</label>
-                  <input id="session-start-time" type="time" class="form-control" readonly>
-                </div>
-                <div class="col-6">
-                  <label class="form-label" for="session-end-time">Час завершення</label>
-                  <input id="session-end-time" type="time" class="form-control" readonly>
-                </div>
+              <div class="mb-3">
+                <label class="form-label" for="session-start-time">Час старту</label>
+                <input id="session-start-time" type="time" class="form-control w-100" readonly :value="viewModel.startTime">
               </div>
-              <div id="timer-display" class="timer-display mb-2">00:00:00</div>
-              <p id="workspace-secondary-text" class="text-muted small mb-3">Запустіть таймер, щоб почати фіксацію робочої сесії.</p>
+              <div id="timer-display" :class="['timer-display', viewModel.timerStateClass]" class="mb-2 p-0 bg-transparent border-0 shadow-none">
+                <mechanical-timer :value="viewModel.timerValue" />
+              </div>
+              <p id="workspace-secondary-text" class="text-muted small mb-3">{{ viewModel.secondaryText }}</p>
               <div class="d-grid gap-2">
-                <button id="start-button" type="button" class="btn btn-primary">Запустити</button>
-                <button id="toggle-button" type="button" class="btn btn-warning">Призупинити</button>
-                <button id="stop-button" type="button" class="btn btn-outline-secondary">Зупинити</button>
+                <button id="start-button" type="submit" class="btn btn-primary" :disabled="loading || viewModel.isStartDisabled || !taskName.trim()">Запустити</button>
+                <button id="toggle-button" type="button" class="btn btn-warning" @click="toggleSession" :disabled="loading || viewModel.isToggleDisabled">{{ viewModel.toggleButtonLabel }}</button>
+                <button id="stop-button" type="button" class="btn btn-outline-secondary" @click="stopSession" :disabled="loading || viewModel.isStopDisabled">Зупинити</button>
               </div>
-              <div id="workspace-feedback" class="alert d-none mt-3 mb-0" role="status" aria-live="polite"></div>
+              <div v-if="feedback" id="workspace-feedback" :class="['alert', `alert-${feedback.type}`, 'mt-3', 'mb-0']" role="status" aria-live="polite">{{ feedback.message }}</div>
             </form>
           </div>
         </div>
@@ -88,7 +72,7 @@
           <div class="card-body">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
               <h2 class="h5 section-title mb-0">Історія сесій</h2>
-              <span id="history-badge" class="badge text-bg-light">Усього: 0</span>
+              <span id="history-badge" class="badge text-bg-light">{{ viewModel.historyBadge }}</span>
             </div>
             <div class="table-responsive mt-3">
               <table class="table align-middle">
@@ -101,10 +85,25 @@
                     <th class="text-end">Дія</th>
                   </tr>
                 </thead>
-                <tbody id="history-table-body"></tbody>
+                <tbody id="history-table-body">
+                  <tr v-for="row in viewModel.historyRows" :key="row.id">
+                    <td>
+                      <div class="history-task-name">{{ row.taskName }}</div>
+                      <div v-if="row.meta" class="history-task-meta text-muted">{{ row.meta }}</div>
+                    </td>
+                    <td>{{ row.startTime }}</td>
+                    <td>{{ row.endTime }}</td>
+                    <td>
+                      <span class="badge text-bg-primary">{{ row.duration }}</span>
+                    </td>
+                    <td class="text-end">
+                      <button type="button" class="history-delete-button" :disabled="loading" :aria-label="`Видалити сесію ${row.taskName}`" @click="deleteSession(row.id)">Видалити</button>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
-            <p id="history-empty-state" class="text-muted small mb-0 d-none">Сесій ще немає. Після зупинки таймера запис з’явиться у таблиці.</p>
+            <p id="history-empty-state" v-show="viewModel.isHistoryEmpty" class="text-muted small mb-0">Сесій ще немає. Після зупинки таймера запис з’явиться у таблиці.</p>
           </div>
         </div>
 
@@ -122,6 +121,25 @@
       </div>
     </div>
   </footer>
-  <script type="module" src="js/main.js"></script>
+  </div>
+  <script>
+    window.process = window.process || { env: { NODE_ENV: 'production' } };
+  </script>
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "/vendor/vue/vue.esm-browser.prod.js",
+        "motion-v": "/vendor/motion-v/index.mjs",
+        "motion-dom": "/vendor/motion-dom/index.mjs",
+        "motion-utils": "/vendor/motion-utils/index.mjs",
+        "framer-motion": "/vendor/framer-motion/index.mjs",
+        "framer-motion/dom": "/vendor/framer-motion/dom.mjs",
+        "@vueuse/core": "/vendor/@vueuse/core/index.js",
+        "@vueuse/shared": "/vendor/@vueuse/shared/index.js",
+        "hey-listen": "/vendor/hey-listen/hey-listen.es.js"
+      }
+    }
+  </script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
