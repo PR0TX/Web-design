@@ -246,4 +246,4 @@ http://localhost:3000
 * **Автор:** Протченко П.О., група **КВ-34**
 * **Лабораторна робота:** №3, Web-дизайн
 * **Завдання:** Розробка Web-додатка засобами Javascript/VueJS
-* **URL звіту (Google Drive):** [Переглянути звіт](https://docs.google.com/document/d/18HFXQSwxrTMs08vbavuD73HtkpM9TyB-/edit?usp=sharing&ouid=109306955313039128869&rtpof=true&sd=true)
+* **URL звіту (Google Drive):** [Звіт](https://docs.google.com/document/d/18HFXQSwxrTMs08vbavuD73HtkpM9TyB-/edit?usp=sharing&ouid=109306955313039128869&rtpof=true&sd=true)
